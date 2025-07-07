@@ -18,7 +18,8 @@ jobs:
           java-version: 21
 
       - name: Unit Tests
-        run: mvn -B test --file pom.xml
+        run: mvn -B test  pom.xml
+        working-directory: ./Backend
 
       - name: Build the application
         run: |
