@@ -12,5 +12,5 @@ server:
 jwt:
   auth:
     converter:
-      resource-id:
+      resource-id: InstaClone_api_demo
       principale-attribute: preferred_username

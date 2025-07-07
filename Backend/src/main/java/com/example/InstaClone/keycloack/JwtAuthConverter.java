@@ -12,7 +12,6 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -56,21 +55,21 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
 
     private Collection<?extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
 
-        Map<String, Object> resourceAcess;
+        Map<String, Object> resourceAccess;
         Map<String, Object> resource;
-    Collection<String> resourceRoles;
+        Collection<String> resourceRoles;
 
 
-        if (jwt.getClaim("resource_acess")== null){
+        if (jwt.getClaim("resource_access")== null){
             return Set.of();
         }
 
-    resourceAcess = jwt.getClaim("resource_access");
+    resourceAccess = jwt.getClaim("resource_access");
 
-        if    (resourceAcess.get(resourceId)== null){
+        if    (resourceAccess.get(resourceId)== null){
             return Set.of();
         }
-    resource = (Map<String, Object>) resourceAcess.get(resourceId);
+    resource=(Map<String, Object>) resourceAccess.get(resourceId);
 
     resourceRoles=(Collection<String>) resource.get("roles");
 
