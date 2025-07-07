@@ -22,6 +22,5 @@ jobs:
         working-directory: ./Backend
 
       - name: Build the application
-        run: |
-          mvn clean
-          mvn -B package --file pom.xml
+        run: mvn clean package -B
+        working-directory: ./Backend
