@@ -6,12 +6,12 @@ on:
 jobs:
   build-deploy:
     name: Build and deploy pipeline for my instaclone app
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses:  actions/checkout@v4
+        uses: actions/checkout@v4
 
-      - name : Setup JDK 21
+      - name: Setup JDK 21
         uses: actions/setup-java@v3
         with:
           distribution: 'corretto'
@@ -24,3 +24,24 @@ jobs:
       - name: Build the application
         run: mvn clean package -B
         working-directory: ./Backend
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Angular dependencies
+        run: npm install
+        working-directory: ./Frontend
+
+      - name: Build Angular app
+        run: npm run build -- --prod
+        working-directory: ./Frontend
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel --prod --confirm

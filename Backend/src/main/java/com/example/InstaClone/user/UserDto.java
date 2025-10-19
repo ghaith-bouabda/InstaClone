@@ -1,4 +1,4 @@
-package com.example.InstaClone.user.dto;
+package com.example.InstaClone.user;
 
 public record UserDto() {
 }
