@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    ports: ["8080:8080"]
+    env_file: .env
+    volumes:
+      - ./Backend:/app
+      - ~/.m2:/root/.m2
+    environment:
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+    command: mvn spring-boot:run -Dspring-boot.run.fork=false
+    depends_on:
+      db:
+          condition: service_healthy
+
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: ./Dockerfile
+    ports: ["4200:4200"]
+    env_file: .env
+    volumes:
+      - ./Frontend:/app
+      - /app/node_modules
+
+  db:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
+      interval: 2s
+      timeout: 2s
+      retries: 10
+
+
+volumes:
+  postgres_data:
